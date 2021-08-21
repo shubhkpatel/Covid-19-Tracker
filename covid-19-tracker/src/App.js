@@ -2,18 +2,25 @@ import { useState, useEffect } from "react";
 import {MenuItem, FormControl,Select,Card, CardContent} from "@material-ui/core";
 import InfoBox from "./InfoBox";
 import Map from "./Map";
+import Table from "./Table";
 import './App.css';
+import { sortData } from "./util";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState('worldwide');
   const [countryInfo, setCountryInfo] = useState({});
-  // STATE = How to write a variable in REACT
-  // https://disease.sh/v3/covid-19/countries
-  // USEEFFECT = Runs a piece of code based on a given condition
+  const [tableData, setTableData] = useState([]);
+  
+  useEffect(() => {
+    fetch('https://disease.sh/v3/covid-19/all')
+    .then(response => response.json())
+    .then(data => {
+      setCountryInfo(data);
+    })
+  }, [])
 
   useEffect(() => {
-    // The code inside here will run once when the component loads and not again after
     // async ==> send a requestAnimationFrame, wait for it and do something with info
 
     const getCountriesData = async () => {
@@ -25,6 +32,9 @@ function App() {
             name: country.country,
             value: country.countryInfo.iso2
           }));
+
+          const sortedData = sortData(data);
+          setTableData(sortedData);
           setCountries(countries);
       });
     };
@@ -79,7 +89,7 @@ function App() {
       <Card className="app__right">
         <CardContent>
           <h3>Live Cases by Country</h3>
-          {/* Table */}
+          <Table countries={tableData} />
           <h3>Worldwide new cases</h3>
           {/* Graph */}
         </CardContent>

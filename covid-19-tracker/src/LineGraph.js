@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Line} from "react-chartjs-2";
+import React, { useState, useEffect } from 'react';
+import { Line } from "react-chartjs-2";
 import numeral from "numeral";
 
 const options = {
@@ -7,7 +7,7 @@ const options = {
         display: false,
     },
     elements: {
-        points: {
+        point: {
             radius: 0,
         },
     },
@@ -16,14 +16,14 @@ const options = {
         mode: "index",
         intersect: false,
         callbacks: {
-            label: function(tooltipItem, data){
+            label: function (tooltipItem, data) {
                 return numeral(tooltipItem.value).format("+0,0");
             },
         },
     },
     scales: {
         xAxes: [
-                {
+            {
                 type: "time",
                 time: {
                     format: "MM/DD/YY",
@@ -37,7 +37,7 @@ const options = {
                     display: false,
                 },
                 ticks: {
-                    callback: function(value, index, values){
+                    callback: function (value, index, values) {
                         return numeral(value).format("0a");
                     },
                 },
@@ -46,13 +46,13 @@ const options = {
     },
 };
 
-const buildChartData = (data, casesType="cases") => {
+const buildChartData = (data, casesType = "cases") => {
     let chartData = [];
     let lastDataPoint;
 
-    for(let date in data.cases) {
-        if(lastDataPoint) {
-            const newDataPoint = {
+    for (let date in data.cases) {
+        if (lastDataPoint) {
+            let newDataPoint = {
                 x: date,
                 y: data[casesType][date] - lastDataPoint,
             };
@@ -63,18 +63,17 @@ const buildChartData = (data, casesType="cases") => {
     return chartData;
 };
 
-function LineGraph({casesType="cases"}) {
+function LineGraph({ casesType = "cases" }) {
     const [data, setData] = useState({});
-
 
     useEffect(() => {
         const fetchData = async () => {
             await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=120')
-            .then(response => response.json())
-            .then(data => {
-                let chartData = buildChartData(data, casesType);
-                setData(chartData);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    let chartData = buildChartData(data, casesType);
+                    setData(chartData);
+                });
         };
         fetchData();
     }, [casesType]);
@@ -82,7 +81,7 @@ function LineGraph({casesType="cases"}) {
     return (
         <div>
             {data?.length > 0 && (
-                <Line    
+                <Line
                     data={{
                         datasets: [
                             {
@@ -92,11 +91,11 @@ function LineGraph({casesType="cases"}) {
                             },
                         ],
                     }}
-                    options = {options}
+                    options={options}
                 />
             )}
         </div>
     );
 }
 
-export default LineGraph
+export default LineGraph;

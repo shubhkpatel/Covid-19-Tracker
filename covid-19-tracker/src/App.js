@@ -62,8 +62,11 @@ function App() {
         setCountry(countryCode);
         setCountryInfo(data);
 
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-        setMapZoom(4);
+        countryCode === "worldwide" ?
+          setMapCenter([34.80746, -40.4796]) :
+          setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+
+        countryCode === "worldwide" ? setMapZoom(3) : setMapZoom(4);
       })
   };
 
@@ -72,7 +75,7 @@ function App() {
       <div className="app__left">
         <div className="app__header">
           <h1>COVID-19 TRACKER</h1>
-          <FormControl className="app__dropname">
+          <FormControl className="app__dropdown">
             <Select variant="outlined" onChange={onCountryChange} value={country}>
               {/* Loop through all the countries and show a drop down list of the options */}
               <MenuItem value="worldwide">Worldwide</MenuItem>
@@ -87,7 +90,7 @@ function App() {
 
         <div className="app__stats">
           <InfoBox isRed active={casesType === "cases"} onClick={(e) => setCasesType("cases")} title='Coronavirus Cases' cases={prettyPrintStat(countryInfo.todayCases)} total={prettyPrintStat(countryInfo.cases)} />
-          <InfoBox active={casesType === "recovered"}  onClick={(e) => setCasesType("recovered")} title='Recovered' cases={prettyPrintStat(countryInfo.todayRecovered)} total={prettyPrintStat(countryInfo.recovered)} />
+          <InfoBox active={casesType === "recovered"} onClick={(e) => setCasesType("recovered")} title='Recovered' cases={prettyPrintStat(countryInfo.todayRecovered)} total={prettyPrintStat(countryInfo.recovered)} />
           <InfoBox isRed active={casesType === "deaths"} onClick={(e) => setCasesType("deaths")} title='Deaths' cases={prettyPrintStat(countryInfo.todayDeaths)} total={prettyPrintStat(countryInfo.deaths)} />
         </div>
 
@@ -99,15 +102,21 @@ function App() {
         />
       </div>
 
-      <Card className="app__right">
-        <CardContent>
-          <h3>Live Cases by Country</h3>
-          <Table countries={tableData} />
-          <h3>Worldwide new {casesType}</h3>
-          <LineGraph casesType={casesType} />
+      <div className="app__right">
+        <Card className="app__table">
+          <CardContent>
+            <h3>Live Cases by Country</h3>
+            <Table countries={tableData} />
+          </CardContent>
+        </Card>
 
-        </CardContent>
-      </Card>
+        <Card className="app__graph">
+          <CardContent>
+            <h3 className="app__graphTitle">Worldwide new {casesType}</h3>
+            <LineGraph casesType={casesType} />
+          </CardContent>
+        </Card>
+      </div>
 
     </div>
   );

@@ -14,6 +14,11 @@ body {
   display: flex;
   justify-content: space-evenly;
   padding: 20px;
+  max-height: 90% !important;
+}
+
+.app__dropdown {
+  background-color: white;
 }
 
 .app__header {
@@ -30,6 +35,16 @@ body {
 
 .app__left {
   flex: 0.9;
+}
+
+.app__graph {
+  margin-top: 10px;
+  height: 270px;
+}
+
+.app__graphTitle{
+  border-bottom: 1px solid whitesmoke;
+  margin-bottom: 20px;
 }
 
 .app__stats {

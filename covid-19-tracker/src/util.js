@@ -4,21 +4,21 @@ import { Circle, Popup } from "react-leaflet";
 
 const casesTypeColors = {
     cases: {
-        hex: "#CC1034",
+        pathOption: {color: "#CC1034"},
         // rgb: "rgb(204,16,52)",
         // half_op: "rgba(204,16,52,0.5)",
         mulitiplier: 800,
     },
 
     recovered: {
-        hex: "#7DD71D",
+        pathOption: {color: "#7DD71D"},
         // rgb: "rgb(125,215,29)",
         // half_op: "rgba(125,215,29,0.5)",
         mulitiplier: 1200,
     },
 
     deaths: {
-        hex: "#C0C0C0",
+        pathOption: {color: "#fb4443"},
         // rgb: "rgb(251,68,67)",
         // half_op: "rgba(251,68,67,0.5)",
         mulitiplier: 2000,
@@ -32,15 +32,14 @@ export const sortData = (data) => {
     return sortedData;
 }
 
-export const prettyPrintStat = (stat) => stat? `+${numeral(stat).format("0,0a")}` : "+0";
+export const prettyPrintStat = (stat) => stat? `+${numeral(stat).format("0,0a")}` : "+0" ;
 
 export const showDataOnMap = (data, casesType = "cases") => (
     data.map((country) => (
         <Circle
             center={[country.countryInfo.lat, country.countryInfo.long]}
             fillOpacity={0.4}
-            color={casesTypeColors[casesType].hex}
-            fillColor={casesTypeColors[casesType].hex}
+            pathOptions={casesTypeColors[casesType].pathOption}
             radius={
                 Math.sqrt(country[casesType] / 10) *
                 casesTypeColors[casesType].mulitiplier
